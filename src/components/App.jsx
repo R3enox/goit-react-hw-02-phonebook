@@ -3,6 +3,7 @@ import { ContactForm } from './ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
+import css from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -17,7 +18,7 @@ export class App extends Component {
 
   handleAddContact = data => {
     const isExist = this.state.contacts.some(
-      contact => contact.name === data.name
+      contact => contact.name.toLowerCase() === data.name.toLowerCase()
     );
 
     if (isExist) {
@@ -60,11 +61,18 @@ export class App extends Component {
         <ContactForm handleAddContact={this.handleAddContact} />
 
         <h2>Contacts</h2>
-        <Filter value={this.filter} filterContacts={this.filterContacts} />
-        <ContactList
-          contacts={this.getContacts()}
-          handleDelete={this.handleDelete}
-        />
+
+        {this.state.contacts.length !== 0 ? (
+          <>
+            <Filter value={this.filter} filterContacts={this.filterContacts} />
+            <ContactList
+              contacts={this.getContacts()}
+              handleDelete={this.handleDelete}
+            />
+          </>
+        ) : (
+          <p className={css.desc}>Phonebook is empty</p>
+        )}
       </div>
     );
   }
